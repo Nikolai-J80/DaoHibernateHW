@@ -14,18 +14,18 @@ public class Person {
     @Id
     @Column(nullable = false, length = 1023)
     private String name;
-
+    @Id
     @Column(nullable = false, length = 1023)
     private String surname;
-
+    @Id
     @Column(nullable = false)
     private int age;
 
-    @Column(nullable = false)
-    private String phone_number;
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private City city_of_living;
+    private City cityOfLiving;
 
     @Override
     public String toString() {
