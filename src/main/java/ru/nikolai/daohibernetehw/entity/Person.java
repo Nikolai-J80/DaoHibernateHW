@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @IdClass(CompositeKey.class)
 public class Person {
@@ -25,7 +24,15 @@ public class Person {
     @Column(nullable = false)
     private String phone_number;
 
-    @Column(nullable = false)
-    private String city_of_living;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private City city_of_living;
 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }
