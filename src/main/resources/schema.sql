@@ -1,8 +1,3 @@
-insert into city(id, name)
-values (1, 'Москва'),
-       (2, 'Санкт-Петербург'),
-       (3, 'Казань');
-
 insert into person(name, surname, age, city_of_living, phone_number)
 values ('Иван', 'Иванов', 25, 'Москва', '+7(800)555-35-35'),
        ('Петр', 'Петров', 18, 'Санкт-Петербург', '+7(905)555-46-64'),

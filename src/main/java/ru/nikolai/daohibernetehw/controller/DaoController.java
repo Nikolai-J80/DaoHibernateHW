@@ -21,12 +21,12 @@ public class DaoController {
 
     @GetMapping("/persons/by-city")
     public List<Person> personsByCity(@RequestParam("city") String city) {
-        return daorepository.findByCityOfLiving(city);
+        return daorepository.findByCity(city);
     }
 
     @GetMapping("/persons/by-age")
     public List<Person> personsByAge(@RequestParam("age") Integer age) {
-        return daorepository.findByAgeLessThanOrderByAgeAsc(age);
+        return daorepository.findByAge(age);
     }
 
     @GetMapping("/persons/by-name-surname")
