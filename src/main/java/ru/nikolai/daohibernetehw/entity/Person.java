@@ -1,6 +1,9 @@
 package ru.nikolai.daohibernetehw.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import lombok.*;
 
 @Builder
@@ -9,6 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
+@ToString
 @IdClass(CompositeKey.class)
 public class Person {
     @Id
@@ -24,15 +28,8 @@ public class Person {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private City cityOfLiving;
+    @Column(name = "city_of_living", nullable = false)
+    private String cityOfLiving;
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
-                '}';
-    }
+
 }

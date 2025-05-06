@@ -1,27 +1,20 @@
 package ru.nikolai.daohibernetehw.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.nikolai.daohibernetehw.entity.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
-public class DaoRepository {
+public interface DaoRepository extends JpaRepository<Person, Long> {
 
-    @PersistenceContext
-    private EntityManager em;
+    List<Person> findByCityOfLiving(String city);
 
-    public List<String> getPersonsByCity(String city) {
-        List<String> str = em.createNativeQuery("SELECT p.* \n" +
-                        "FROM Person p\n" +
-                        "RIGHT JOIN City c ON p.city_of_living_id = c.id\n" +
-                        "WHERE c.name = :city", Person.class)
-                .setParameter("city", city)
-                .getResultList();
-        return str;
-    }
+    List<Person> findByAgeLessThanOrderByAgeAsc(Integer age);
+
+    Optional<Person> findByNameAndSurname(String name, String surname);
 
 }
