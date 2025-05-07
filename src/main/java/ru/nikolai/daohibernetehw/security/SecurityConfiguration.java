@@ -25,8 +25,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers("/persons/by-city").permitAll()
-                        .requestMatchers("/persons/by-age").hasRole("READ")
-                        .requestMatchers("/persons/by-name-surname").hasRole("WRITE")
+                        .requestMatchers("/persons/by-age").hasRole("ADMIN")
+                        .requestMatchers("/persons/by-age").hasRole("by-age")
+                        .requestMatchers("/persons/by-name-surname").hasRole("ADMIN")
+                        .requestMatchers("/persons/by-name-surname").hasRole("by-name")
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
@@ -38,13 +40,13 @@ public class SecurityConfiguration {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("admin")
                 .password(encoder().encode("admin"))
-                .roles("DELETE").build());
+                .roles("ADMIN").build());
         manager.createUser(User.withUsername("user1")
                 .password(encoder().encode("password1"))
-                .roles("WRITE").build());
+                .roles("by-age").build());
         manager.createUser(User.withUsername("user2")
                 .password(encoder().encode("password2"))
-                .roles("READ").build());
+                .roles("by-name").build());
         return manager;
     }
 

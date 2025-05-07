@@ -35,28 +35,5 @@ public class DaoController {
         return daorepository.findByNameAndSurname(name, surname);
     }
 
-    @Secured("ROLE_READ")
-    @GetMapping("/read")
-    public String read() {
-        return "read";
-    }
-
-    @RolesAllowed("ROLE_WRITE")
-    @PostMapping("/write")
-    public String write() {
-        return "write";
-    }
-
-    @PreAuthorize("hasAnyRole('ROLE_DELETE', 'ROLE_WRITE')")
-    @DeleteMapping("/delete")
-    public String delete() {
-        return "delete";
-    }
-
-    @PostAuthorize("#username == authentication.principal.username")
-    @GetMapping("/username")
-    public String username(@RequestParam("username") String username) {
-        return username;
-    }
 
 }
