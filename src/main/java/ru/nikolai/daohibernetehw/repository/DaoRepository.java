@@ -1,7 +1,7 @@
 package ru.nikolai.daohibernetehw.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.nikolai.daohibernetehw.entity.Person;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface DaoRepository extends JpaRepository<Person, Long> {
+public interface DaoRepository extends CrudRepository<Person, Integer> {
 
     @Query("select p from Person p where p.cityOfLiving = :city")
     List<Person> findByCity(@Param("city") String city);

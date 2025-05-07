@@ -1,9 +1,11 @@
 package ru.nikolai.daohibernetehw.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.core.PrettyPrinter;
+import jakarta.annotation.security.RolesAllowed;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import ru.nikolai.daohibernetehw.entity.Person;
 import ru.nikolai.daohibernetehw.repository.DaoRepository;
 
@@ -18,7 +20,6 @@ public class DaoController {
     public DaoController(DaoRepository daorepository) {
         this.daorepository = daorepository;
     }
-
     @GetMapping("/persons/by-city")
     public List<Person> personsByCity(@RequestParam("city") String city) {
         return daorepository.findByCity(city);
@@ -33,4 +34,29 @@ public class DaoController {
     public Optional<Person> personsByNameSurname(@RequestParam("name") String name, @RequestParam("surname") String surname) {
         return daorepository.findByNameAndSurname(name, surname);
     }
+
+    @Secured("ROLE_READ")
+    @GetMapping("/read")
+    public String read() {
+        return "read";
+    }
+
+    @RolesAllowed("ROLE_WRITE")
+    @PostMapping("/write")
+    public String write() {
+        return "write";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_DELETE', 'ROLE_WRITE')")
+    @DeleteMapping("/delete")
+    public String delete() {
+        return "delete";
+    }
+
+    @PostAuthorize("#username == authentication.principal.username")
+    @GetMapping("/username")
+    public String username(@RequestParam("username") String username) {
+        return username;
+    }
+
 }
