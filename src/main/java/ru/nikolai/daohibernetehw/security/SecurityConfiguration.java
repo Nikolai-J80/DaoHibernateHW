@@ -4,6 +4,7 @@ import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
@@ -12,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 @Configuration
 public class SecurityConfiguration {
     @Bean
@@ -24,11 +25,10 @@ public class SecurityConfiguration {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/persons/by-city").permitAll()
-                        .requestMatchers("/persons/by-age").hasRole("ADMIN")
-                        .requestMatchers("/persons/by-age").hasRole("by-age")
-                        .requestMatchers("/persons/by-name-surname").hasRole("ADMIN")
-                        .requestMatchers("/persons/by-name-surname").hasRole("by-name")
+                        .requestMatchers("/hi").permitAll()
+                        .requestMatchers("/delete").hasRole("DELETE")
+                        .requestMatchers("/read").hasRole("READ")
+                        .requestMatchers("/write").hasRole("WRITE")
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
@@ -40,13 +40,13 @@ public class SecurityConfiguration {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("admin")
                 .password(encoder().encode("admin"))
-                .roles("ADMIN").build());
+                .roles("DELETE","WRITE","READ").build());
         manager.createUser(User.withUsername("user1")
                 .password(encoder().encode("password1"))
-                .roles("by-age").build());
+                .roles("WRITE").build());
         manager.createUser(User.withUsername("user2")
                 .password(encoder().encode("password2"))
-                .roles("by-name").build());
+                .roles("READ").build());
         return manager;
     }
 
